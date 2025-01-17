@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.7"
+  },
+  "scripts": {
+    "boom": "tsc app.ts && node app.js"
   }
 }
