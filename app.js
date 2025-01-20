@@ -153,6 +153,133 @@ var deleteCompany = function () { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); };
+var viewEmployees = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        Database.query("Select * from employees", function (err, results) {
+            if (err) {
+                console.error(err);
+            }
+            else {
+                console.table(results);
+                CRM();
+            }
+        });
+        return [2 /*return*/];
+    });
+}); };
+var addEmployee = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, first_name, last_name, employer_id;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0: return [4 /*yield*/, inquirer_1.default.prompt([
+                    {
+                        type: "input",
+                        name: "first_name",
+                        message: "Enter Employee First Name: ",
+                    },
+                    {
+                        type: "input",
+                        name: "last_name",
+                        message: "Enter Employee Last Name: ",
+                    },
+                    {
+                        type: "number",
+                        name: "employer_id",
+                        message: "Enter Employer ID: ",
+                    },
+                ])];
+            case 1:
+                _a = _b.sent(), first_name = _a.first_name, last_name = _a.last_name, employer_id = _a.employer_id;
+                Database.query("INSERT INTO employees (first_name, last_name, employer_id) VALUES (?, ?, ?)", [first_name, last_name, employer_id], function (err, results) {
+                    if (err) {
+                        console.error(err);
+                        CRM();
+                    }
+                    else {
+                        console.log("Employee Added");
+                        CRM();
+                    }
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
+var updateEmployee = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var employee_id, New_First_Name, New_Last_Name, New_Employer_ID;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, inquirer_1.default.prompt([
+                    {
+                        type: "number",
+                        name: "employee_id",
+                        message: "What is the ID of the employee who's name you wish to change?",
+                    },
+                ])];
+            case 1:
+                employee_id = (_a.sent()).employee_id;
+                return [4 /*yield*/, inquirer_1.default.prompt([
+                        {
+                            type: "input",
+                            name: "New_First_Name",
+                            message: "What is the employees new first name",
+                        },
+                    ])];
+            case 2:
+                New_First_Name = (_a.sent()).New_First_Name;
+                return [4 /*yield*/, inquirer_1.default.prompt([
+                        {
+                            type: "input",
+                            name: "New_Last_Name",
+                            message: "What is the employees new last name",
+                        },
+                    ])];
+            case 3:
+                New_Last_Name = (_a.sent()).New_Last_Name;
+                return [4 /*yield*/, inquirer_1.default.prompt([
+                        {
+                            type: "number",
+                            name: "New_Employer_ID",
+                            message: "What is the employees new employer ID",
+                        },
+                    ])];
+            case 4:
+                New_Employer_ID = (_a.sent()).New_Employer_ID;
+                Database.query("UPDATE employees SET first_name = ?, last_name = ?, employer_id = ? Where id = ?", [New_First_Name, New_Last_Name, New_Employer_ID, employee_id], function (err, results) {
+                    if (err) {
+                        console.log("Error updating employee", err);
+                    }
+                    else if (results.affectedRows > 0) {
+                        console.log("Successful Update");
+                    }
+                    else {
+                        console.log("No changes made, check the employee id");
+                    }
+                    CRM();
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
+var deleteEmployee = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var id;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, inquirer_1.default.prompt([
+                    {
+                        type: "number",
+                        name: "id",
+                        message: "What is the id of the employee you wish to delete",
+                    },
+                ])];
+            case 1:
+                id = (_a.sent()).id;
+                Database.query("DELETE FROM employees WHERE id = ?", [id]);
+                console.log("Employee with ID ".concat(id, " has been deleted"));
+                CRM();
+                return [2 /*return*/];
+        }
+    });
+}); };
 var CRM = function () { return __awaiter(void 0, void 0, void 0, function () {
     var input;
     return __generator(this, function (_a) {
@@ -189,6 +316,18 @@ var CRM = function () { return __awaiter(void 0, void 0, void 0, function () {
                         break;
                     case "4: Delete Company":
                         deleteCompany();
+                        break;
+                    case "5: View Employees":
+                        viewEmployees();
+                        break;
+                    case "6: Add Employee":
+                        addEmployee();
+                        break;
+                    case "7: Update Employee":
+                        updateEmployee();
+                        break;
+                    case "8: Delete Employee":
+                        deleteEmployee();
                         break;
                     case "9: Exit":
                         Database.end();
